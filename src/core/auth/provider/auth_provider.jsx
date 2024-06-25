@@ -43,14 +43,14 @@ export const AuthProvider = ({ children }) => {
             if (token) {
                 const { nombre, rol } = jwtDecode(token);
 
-                setTokenData({
+                const datos = ({
                     'Authorization': token,
                     nombre,
                     rol,
                 })
 
                 Object.keys(tokenData).forEach(key => {
-                    localStorage.setItem(key, tokenData[key])
+                    localStorage.setItem(key, datos[key])
                 });
                 setIsLoggedIn(true);
             } else {
