@@ -1,7 +1,9 @@
 import React from 'react';
 import LoginForm from '../../../core/components/form/login_form';
+import { useNavigate } from 'react-router-dom';
 
 const LoginView = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className="d-flex vh-100 align-items-center">

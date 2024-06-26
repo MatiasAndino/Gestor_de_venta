@@ -8,13 +8,13 @@ export const AuthProvider = ({ children }) => {
     const TOKEN_KEY = "Authorization";
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isNull, setIsNull] = useState(false);
     const [tokenData, setTokenData] = useState({
         'Authorization': '',
         nombre: '',
         rol: ''
     });
 
-    const [isNull, setIsNull] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem(TOKEN_KEY);
@@ -49,15 +49,16 @@ export const AuthProvider = ({ children }) => {
                     rol,
                 })
 
-                Object.keys(tokenData).forEach(key => {
+                Object.keys(datos).forEach(key => {
                     localStorage.setItem(key, datos[key])
                 });
                 setIsLoggedIn(true);
+                setTokenData(datos);
             } else {
                 setIsNull(true)
                 setTimeout(() => {
                     setIsNull(false)
-                },4000);
+                },2000);
             }
         } catch (error) {
             console.log('AuthProvider-login', error);
@@ -69,7 +70,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const token = localStorage.getItem(TOKEN_KEY);
             if (token) {
-                Object.keys(datos).forEach(key => {
+                Object.keys(tokenData).forEach(key => {
                     localStorage.removeItem(key)
                 });
             }
