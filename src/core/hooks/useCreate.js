@@ -1,12 +1,5 @@
-import { useState } from "react";
 
 export const useCreate = () => {
-
-    const [message, setMessage] = useState({
-        errorPassword: false,
-        errorUsuario: false,
-        successful: false,
-    })
 
 
     const create = async (form) => {
@@ -20,26 +13,32 @@ export const useCreate = () => {
                 body: JSON.stringify(form)
             }
 
+            let message = {
+                errorPassword: false,
+                errorUsuario: false,
+                successful: false,
+            };
+
             if (form.password === form.confirmar_password) {
                 let res = await fetch('http://localhost:3000/api/usuarios/Register', config);
                 let json = await res.json();
 
                 if (json.usuario) {
-                    setMessage({
+                    message = {
                         ...message,
                         successful: true
-                    })
+                    }
                 } else {
-                    setMessage({
+                    message = {
                         ...message,
                         errorUsuario: true
-                    })
+                    }
                 }
             } else {
-                setMessage({
+                message = {
                     ...message,
                     errorPassword: true
-                })
+                }
             }
 
             return message;

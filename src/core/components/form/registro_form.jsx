@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useCreate } from '../../hooks/useCreate';
 import AlertaError from '../alerts/alerta_error';
+import AlertaSuccessful from '../alerts/alerta_successful';
+import { useNavigate } from 'react-router-dom';
 
 const RegistroForm = () => {
+    const TIMEOUT = 1500;
+    const navigate = useNavigate();
 
     const { create } = useCreate();
     const [message, setMessage] = useState({
@@ -18,33 +22,25 @@ const RegistroForm = () => {
         confirmar_password: '',
         rol: 'empleado'
     });
-
-    useEffect(() => {
-
-        console.log("use effect",message)
-        
-        
-    }, [message]);
     
     const handleForm = async event => {
         event.preventDefault();
         
         try {
-            const nuevoUsuario = await create(form);
+            const userMessage = await create(form);
             
-            console.log('NUEVOUSUARIO', nuevoUsuario)
-            setMessage(() => {
-                return nuevoUsuario;
-            });
+            setMessage(() => userMessage);
             
-            console.log("FUNCION",message)
             setTimeout(() => {
+                if (userMessage.successful) navigate('/');
+                
                 setMessage({
                     errorPassword: false,
                     errorUsuario: false,
                     successful: false,
                 })
-            }, 2000);
+            }, TIMEOUT);
+
         } catch (error) {
             console.log('RegistroForm - handleForm', error);
         }
@@ -127,10 +123,15 @@ const RegistroForm = () => {
                 <option value="admin">Admin</option>
             </select>
 
-            <button type="submit" className="btn btn-primary mt-4">Registrarse</button>
+            {
+            message.errorPassword || message.errorUsuario 
+            ?<button type='button' className="btn btn-primary mt-4" >Registrarse</button>
+            :<button type="submit" className="btn btn-primary mt-4" >Registrarse</button>
+            }
 
-            {message.errorPassword && <AlertaError mensaje="Email o password incorrectos." />}
+            {message.errorPassword && <AlertaError mensaje="Password incorrecto." />}
             {message.errorUsuario && <AlertaError mensaje="El usuario ya exíste." />}
+            {message.successful && <AlertaSuccessful mensaje="Usuario creado correctamente." />}
 
         </form>
     )

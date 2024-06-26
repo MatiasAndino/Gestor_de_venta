@@ -15,15 +15,28 @@ export const AuthProvider = ({ children }) => {
         rol: ''
     });
 
+    const jwTokenDecode = (token) => {
+        const { nombre, rol } = jwtDecode(token);
+
+        const datos = ({
+            'Authorization': token,
+            nombre,
+            rol,
+        })
+
+        return datos;
+    }
 
     useEffect(() => {
         const token = localStorage.getItem(TOKEN_KEY);
 
         if (token) {
-            const datos = jwtDecode(token);
+
+            const datos = jwTokenDecode(token)
             setTokenData(datos);
             setIsLoggedIn(true);
         }
+
     }, []);
 
     const login = async (form) => {
@@ -41,24 +54,19 @@ export const AuthProvider = ({ children }) => {
             let { token } = await res.json();
 
             if (token) {
-                const { nombre, rol } = jwtDecode(token);
-
-                const datos = ({
-                    'Authorization': token,
-                    nombre,
-                    rol,
-                })
+                const datos = jwTokenDecode(token);
 
                 Object.keys(datos).forEach(key => {
                     localStorage.setItem(key, datos[key])
                 });
+
                 setIsLoggedIn(true);
                 setTokenData(datos);
             } else {
                 setIsNull(true)
                 setTimeout(() => {
                     setIsNull(false)
-                },2000);
+                }, 1500);
             }
         } catch (error) {
             console.log('AuthProvider-login', error);
@@ -83,8 +91,8 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
-            { isNull && <AlertaError mensaje="Email o password incorrectos." /> }
-            { children }
+            {isNull && <AlertaError mensaje="Email o password incorrectos." />}
+            {children}
         </AuthContext.Provider>
     )
 }
