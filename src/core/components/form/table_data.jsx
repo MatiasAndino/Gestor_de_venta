@@ -1,11 +1,21 @@
 import React from 'react'
+import { useProductos } from '../../hooks/useProductos';
 
-const TableData = ({ productos }) => {
+const TableData = ({ mostrarAlerta }) => {
+    const { productos, deleteProducto } = useProductos();
 
+    async function eliminarProducto(event, id) {
+        event.preventDefault();
+        try {
+            const deleteMessage = await deleteProducto(id);
+            mostrarAlerta(deleteMessage, 'successful');
+        } catch (error) {
+            console.log('TableData-eliminarProducto', error)
+        }
+    }
 
     return (
         <tbody>
-
             {
                 productos.map(item => (
                     <tr key={item.id}>
@@ -30,10 +40,7 @@ const TableData = ({ productos }) => {
                         <td>
                             <button
                                 className="btn btn-danger"
-                                onClick={() => {
-                                    // useDelete(item.id);
-                                    // setActualizarTabla((prev) => !prev);
-                                }}
+                                onClick={(event) => eliminarProducto(event, item.id)}
                             >ELIMINAR</button>
                         </td>
                         <td>

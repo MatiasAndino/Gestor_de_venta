@@ -1,19 +1,14 @@
-import React, { useState } from 'react'
-import { useCreate } from '../../hooks/useCreate';
-import AlertaError from '../alerts/alerta_error';
-import AlertaSuccessful from '../alerts/alerta_successful';
+import React, { useRef, useState } from 'react'
+import { useRegister } from '../../hooks/useRegister';
 import { useNavigate } from 'react-router-dom';
+import AdministradorAlertas from '../alerts/administrador_alertas';
 
 const RegistroForm = () => {
-    const TIMEOUT = 1500;
     const navigate = useNavigate();
 
-    const { create } = useCreate();
-    const [message, setMessage] = useState({
-        errorPassword: false,
-        errorUsuario: false,
-        successful: false,
-    });
+    const { registerNewUser } = useRegister();
+    const administradorAlertasRef = useRef();
+
 
     const [form, setForm] = useState({
         nombre: '',
@@ -22,28 +17,23 @@ const RegistroForm = () => {
         confirmar_password: '',
         rol: 'empleado'
     });
-    
+
     const handleForm = async event => {
         event.preventDefault();
-        
-        try {
-            const userMessage = await create(form);
-            
-            setMessage(() => userMessage);
-            
-            setTimeout(() => {
-                if (userMessage.successful) navigate('/');
-                
-                setMessage({
-                    errorPassword: false,
-                    errorUsuario: false,
-                    successful: false,
-                })
-            }, TIMEOUT);
 
+        try {
+            const { text, type } = await registerNewUser(form);
+
+            administradorAlertasRef.current.showMessage(text, type);
+
+            if (type === 'successful') {
+                setTimeout(() => {
+                    navigate('/')
+                },1000)
+            }
         } catch (error) {
-            console.log('RegistroForm - handleForm', error);
-        }
+            console.log('RegistroForm-handleForm', error);
+        } 
 
     }
 
@@ -123,15 +113,9 @@ const RegistroForm = () => {
                 <option value="admin">Admin</option>
             </select>
 
-            {
-            message.errorPassword || message.errorUsuario 
-            ?<button type='button' className="btn btn-primary mt-4" >Registrarse</button>
-            :<button type="submit" className="btn btn-primary mt-4" >Registrarse</button>
-            }
+            <button type="submit" className="btn btn-primary mt-4" >Registrarse</button>
 
-            {message.errorPassword && <AlertaError mensaje="Password incorrecto." />}
-            {message.errorUsuario && <AlertaError mensaje="El usuario ya exíste." />}
-            {message.successful && <AlertaSuccessful mensaje="Usuario creado correctamente." />}
+            <AdministradorAlertas ref={administradorAlertasRef} />
 
         </form>
     )

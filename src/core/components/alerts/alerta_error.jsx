@@ -1,9 +1,9 @@
 import React from 'react'
 
-const AlertaError = ({ mensaje }) => {
+const AlertaError = ({ message }) => {
     return (
         <div className={`alert alert-danger alert-dismissible fade show text-center fixed-top horizontal-shake`} role="alert">
-            <strong className="mx-2">Error!</strong> { mensaje }
+            <strong className="mx-2">Error!</strong> { message }
         </div>
     )
 }

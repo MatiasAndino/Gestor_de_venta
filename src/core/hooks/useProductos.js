@@ -6,14 +6,16 @@ import { useEffect, useState } from "react";
 export const useProductos = () => {
 
     const { controlToken } = useControl();
-    const { categorias, isLoading : categoriaLoading } = useCategorias();
-    const { proveedores, isLoading : proveedorLoading } = useProveedores();
+    const { categorias, isLoading: categoriaLoading } = useCategorias();
+    const { proveedores, isLoading: proveedorLoading } = useProveedores();
 
     const [productos, setProductos] = useState([]);
-    
+    const [update, setUpdate] = useState([]);
+
     useEffect(() => {
         getProductos();
-    },[categoriaLoading, proveedorLoading])
+        // console.log('USEEFFECT PRODUCTOS Y CONTANDO')
+    }, [categoriaLoading, proveedorLoading, update])
 
     const getProductos = async () => {
 
@@ -52,5 +54,31 @@ export const useProductos = () => {
         }
     }
 
-    return { productos }
+    const deleteProducto = async (id) => {
+        try {
+            const token = localStorage.getItem('Authorization');
+
+            let config = {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+            }
+            let res = await fetch(`http://localhost:3000/api/productos/${id}`, config);
+
+            controlToken(res.status);
+
+            let json = await res.json();
+
+            setUpdate((prev) => !prev);
+
+            return json.message;
+        } catch (error) {
+            console.log('useProductos-deleteProducto', error)
+        }
+    }
+
+    return { productos, deleteProducto }
 };

@@ -1,28 +1,42 @@
-import React, { useEffect, useState } from 'react'
-import { useProductos } from '../../hooks/useProductos';
+import React, { useEffect, useRef, useState } from 'react'
 import TableData from './table_data';
+import AdministradorAlertas from '../alerts/administrador_alertas';
 
 const TableForm = () => {
-    const { productos } = useProductos();
+
+    const administradorAlertasRef = useRef();
+
+    function mostrarAlerta(text, type) {
+        administradorAlertasRef.current.showMessage(text, type);
+    }
 
     return (
-        <table className="table table-striped table-dark">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>NOMBRE</th>
-                    <th>DESCRIPCION</th>
-                    <th>PRECIO</th>
-                    <th>CATEGORIA</th>
-                    <th>PROVEEDOR</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
+        <>
+            <div className="table-responsive border" style={{ maxHeight: '60vh' }} >
 
-            <TableData productos={productos} />
+                <table className="table table-striped table-dark">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>NOMBRE</th>
+                            <th>DESCRIPCION</th>
+                            <th>PRECIO</th>
+                            <th>CATEGORIA</th>
+                            <th>PROVEEDOR</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
 
-        </table>
+                    <TableData mostrarAlerta={ mostrarAlerta } />
+
+                </table>
+            </div>
+            <div className="btn btn-info mt-3">NUEVO PRODUCTO</div>
+            <AdministradorAlertas ref={administradorAlertasRef} />
+
+            {/* <AlertaSuccessful mensaje={message} /> */}
+        </>
     )
 }
 
