@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import TableData from './table_data';
 import AdministradorAlertas from '../alerts/administrador_alertas';
 
@@ -23,19 +23,17 @@ const TableForm = () => {
                             <th>PRECIO</th>
                             <th>CATEGORIA</th>
                             <th>PROVEEDOR</th>
-                            <th></th>
-                            <th></th>
+                            <th>D</th>
+                            <th>A</th>
                         </tr>
                     </thead>
 
-                    <TableData mostrarAlerta={ mostrarAlerta } />
-
+                    <TableData mostrarAlerta={mostrarAlerta}/>
+                    
                 </table>
             </div>
             <div className="btn btn-info mt-3">NUEVO PRODUCTO</div>
             <AdministradorAlertas ref={administradorAlertasRef} />
-
-            {/* <AlertaSuccessful mensaje={message} /> */}
         </>
     )
 }

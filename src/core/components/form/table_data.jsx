@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useProductos } from '../../hooks/useProductos';
+import UpdateForm from './update_form';
+import useCategorias from '../../hooks/useCategorias';
 
 const TableData = ({ mostrarAlerta }) => {
     const { productos, deleteProducto } = useProductos();
+    const { categorias, isLoading: categoriasLoading } = useCategorias();
+
+    const [optionCategorias, setOptionCategorias] = useState([]);
 
     async function eliminarProducto(event, id) {
         event.preventDefault();
@@ -13,6 +18,18 @@ const TableData = ({ mostrarAlerta }) => {
             console.log('TableData-eliminarProducto', error)
         }
     }
+
+    useEffect(() => {
+        if (categoriasLoading) return;
+        const optionCategoriasTemp = categorias.map( ({id, nombre }) => {
+            return {
+                id,
+                value:nombre,
+                label:nombre
+            }
+        })
+        setOptionCategorias(optionCategoriasTemp);
+    }, [categoriasLoading])
 
     return (
         <tbody>
@@ -41,12 +58,16 @@ const TableData = ({ mostrarAlerta }) => {
                             <button
                                 className="btn btn-danger"
                                 onClick={(event) => eliminarProducto(event, item.id)}
-                            >ELIMINAR</button>
+                            >
+                                ELIMINAR
+                            </button>
                         </td>
                         <td>
-                            {/* <Actualizar
-                                item={item}
-                            /> */}
+
+                            <button type="button" className="btn btn-success" data-bs-toggle="modal" data-bs-target={`#modal-${item.id}`}>
+                                ACTUALIZAR
+                            </button>
+                            <UpdateForm item={ item } optionCategorias={ optionCategorias } />
                         </td>
                     </tr>
                 ))
