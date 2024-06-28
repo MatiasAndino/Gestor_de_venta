@@ -5,6 +5,11 @@ import { useEffect, useState } from "react";
 
 export const useProductos = () => {
 
+    const typeMessage = {
+        error: 'error',
+        successful: 'successful'
+    }
+
     const { controlToken } = useControl();
     const { categorias, isLoading: categoriaLoading } = useCategorias();
     const { proveedores, isLoading: proveedorLoading } = useProveedores();
@@ -14,7 +19,6 @@ export const useProductos = () => {
 
     useEffect(() => {
         getProductos();
-        // console.log('USEEFFECT PRODUCTOS Y CONTANDO')
     }, [categoriaLoading, proveedorLoading, update])
 
     const getProductos = async () => {
@@ -67,18 +71,59 @@ export const useProductos = () => {
                 },
             }
             let res = await fetch(`http://localhost:3000/api/productos/${id}`, config);
-
             controlToken(res.status);
 
             let json = await res.json();
 
-            setUpdate((prev) => !prev);
 
-            return json.message;
+            if (res.status === 200) {
+                setUpdate((prev) => !prev);
+                return { text: json.message, type: typeMessage.successful };
+            }
+            return { text: json.error, type: typeMessage.error };
         } catch (error) {
             console.log('useProductos-deleteProducto', error)
         }
     }
 
-    return { productos, deleteProducto }
+    const updateProducto = async (form) => {
+        const token = localStorage.getItem('Authorization');
+
+        const proveedorId = proveedores.find(proveedor => proveedor.nombre === form.proveedorId).id;
+        const categoriaId = categorias.find(categoria => categoria.nombre === form.categoriaId).id;
+
+        const realForm = {
+            ...form,
+            proveedorId,
+            categoriaId,
+        }
+
+        try {
+            let config = {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify(realForm)
+            }
+
+            let res = await fetch(`http://localhost:3000/api/productos/${realForm.id}`, config);
+            controlToken(res.status);
+            let json = await res.json();
+
+            if (res.status === 200) {
+                setUpdate((prev) => !prev);
+                return { text: json.message, type: typeMessage.successful };
+            }
+            return { text: json.error, type: typeMessage.error };
+
+
+        } catch (error) {
+            console.log('useProducto-updateProducto', error);
+        }
+    }
+
+    return { productos, deleteProducto, updateProducto }
 };

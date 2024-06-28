@@ -75,9 +75,11 @@ const UpdateForm = ({ item, optionCategorias }) => {
                                 onChange={handleInputChange}
                             >
                                 {
-                                    optionCategorias.map(({ id, value }) => (
-                                        <option value={value} key={id}>{value}</option>
-                                    ))
+                                    // optionCategorias.map(({ id, value }) => (
+                                    //     <option value={value} key={id}>{value}</option>
+                                    // ))
+                                    // optionCategorias.forEach(a => console.log(a))
+
                                 }
                             </select>
 
