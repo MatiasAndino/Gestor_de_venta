@@ -1,10 +1,10 @@
 import React from 'react'
-import TableForm from './table_form';
+import TableData from './table_data';
 
 
 const ProductosForm = () => {
     return (
-        <TableForm />
+        <TableData />
     )
 }
 

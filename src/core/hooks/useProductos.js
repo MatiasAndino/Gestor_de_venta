@@ -10,6 +10,10 @@ export const useProductos = () => {
         successful: 'successful'
     }
 
+    const statusCodes = {
+
+    }
+
     const { controlToken } = useControl();
     const { categorias, isLoading: categoriaLoading } = useCategorias();
     const { proveedores, isLoading: proveedorLoading } = useProveedores();
@@ -125,5 +129,44 @@ export const useProductos = () => {
         }
     }
 
-    return { productos, deleteProducto, updateProducto }
+    const createProducto = async (form) => {
+        const token = localStorage.getItem('Authorization');
+
+        const categoriaId = form.categoriaId !== 1 ? categorias.find(categoria => categoria.nombre === form.categoriaId).id : 1;
+        const proveedorId = form.proveedorId !== 1 ? proveedores.find(proveedor => proveedor.nombre === form.proveedorId).id : 1;
+
+        const realForm = {
+            ...form,
+            proveedorId,
+            categoriaId,
+        }
+
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify(realForm)
+            }
+
+            let res = await fetch(`http://localhost:3000/api/productos`, config);
+            controlToken(res.status);
+            let json = await res.json();
+
+            if (res.status === 201) {
+                setUpdate((prev) => !prev);
+                return { text: 'Producto creado correctamente.', type: typeMessage.successful };
+            }
+            return { text: json.error, type: typeMessage.error };
+
+
+        } catch (error) {
+            console.log('useProducto-createProducto', error);
+        }
+    }
+
+    return { productos, deleteProducto, updateProducto, createProducto }
 };

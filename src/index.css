@@ -1,5 +1,5 @@
 body {
-  background-color: rgb(62, 93, 139);
+  background-color: rgb(24, 50, 89);
   /* background-color: rgb(48, 50, 53); */
   overflow-y: hidden;
 }
@@ -23,7 +23,7 @@ body {
   100% { transform:translate(0,0) }
  }
 
- .table-responsive thead th {
+.table-responsive thead th {
   position: sticky;
   top: 0;
   z-index: 1;
@@ -31,4 +31,8 @@ body {
 
 .sombra {
   box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.45);
+}
+
+.h-table {
+  max-height: 60vh;
 }

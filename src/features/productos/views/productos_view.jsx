@@ -5,7 +5,7 @@ const ProductosView = () => {
   return (
     <div className="d-flex vh-100">
       <div className="container bg-custom-opacity text-light" >
-        <h2 className='text-center m-5'>PRODUCTOS</h2>
+        <h2 className='text-center p-3'><strong>PRODUCTOS</strong></h2>
           <ProductosForm />
       </div>
     </div>

@@ -1,7 +1,6 @@
 import React from 'react'
 
 const TableHead = ({ datos }) => {
-    console.log()
     return (
         <thead>
             <tr>

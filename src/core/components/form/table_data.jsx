@@ -1,18 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useProductos } from '../../hooks/useProductos';
-import UpdateForm from './update_form';
-import useCategorias from '../../hooks/useCategorias';
-import Modal from '../modal/modal';
+import ModalActualizarProducto from '../modal/modal_actualizar_producto';
 import TableHead from './table_head';
-import useProveedores from '../../hooks/useProveedores';
 import AdministradorAlertas from '../alerts/administrador_alertas';
+import ModalCrearProducto from '../modal/modal_crear_producto';
+
+import editImage from '../../../assets/icons/pencil-square.svg'
+import deleteImage from '../../../assets/icons/file-earmark-x.svg'
+import newImage from '../../../assets/icons/file-earmark-plus.svg'
 
 const TableData = () => {
-    const { productos, deleteProducto, updateProducto } = useProductos();
-    const { categorias, isLoading: categoriasLoading } = useCategorias();
-    const { proveedores, isLoading: proveedoresLoading } = useProveedores();
+    const { productos, deleteProducto, updateProducto, createProducto } = useProductos();
 
-    const [selectedItem, setSelectedItem] = useState(0);
+    const [selectedItem, setSelectedItem] = useState({
+        id: 0,
+        nombre: '',
+        descripcion: '',
+        precio: 0,
+        categoriaId: 1,
+        proveedorId: 1
+    });
 
     const administradorAlertasRef = useRef();
 
@@ -21,10 +28,10 @@ const TableData = () => {
     }
 
 
-    async function eliminarProducto(event, id) {
+    async function handleEliminarProducto(event, id) {
         event.preventDefault();
         try {
-            const {text, type} = await deleteProducto(id);
+            const { text, type } = await deleteProducto(id);
             mostrarAlerta(text, type);
         } catch (error) {
             console.log('TableData-eliminarProducto', error)
@@ -33,67 +40,78 @@ const TableData = () => {
 
     return (
         <>
-            <table className="table table-striped table-dark">
-                <TableHead datos={['ID', 'PRODUCTO', 'DESCRIPCIÓN', 'PRECIO', 'CATEGORIA', 'PROVEEDOR', 'DEL', 'UPD']} />
-                <tbody>
-                    {
-                        productos.map(item => (
-                            <tr key={item.id}>
-                                <td>
-                                    {item.id}
-                                </td>
-                                <td>
-                                    {item.nombre}
-                                </td>
-                                <td>
-                                    {item.descripcion}
-                                </td>
-                                <td>
-                                    {item.precio}
-                                </td>
-                                <td>
-                                    {item.categoriaId}
-                                </td>
-                                <td>
-                                    {item.proveedorId}
-                                </td>
-                                <td>
-                                    <button
-                                        className="btn btn-danger"
-                                        onClick={(event) => eliminarProducto(event, item.id)}
-                                    >
-                                        ELIMINAR
-                                    </button>
-                                </td>
-                                <td>
-                                    <button
-                                        type="button"
-                                        className="btn btn-success"
-                                        data-bs-toggle="modal"
-                                        data-bs-target='#modalUpdate'
-                                        onClick={() => setSelectedItem(item)}
-                                    >
-                                        ACTUALIZAR
-                                    </button>
-                                </td>
-                            </tr>
-                        ))
-                    }
-                </tbody>
-            </table>
+            <div className="overflow-auto table-responsive h-table border border-secondary border-3  bg-dark">
 
-            {
-                !categoriasLoading && !proveedoresLoading && <Modal
+                <table className="table table-striped table-dark">
+                    <TableHead datos={['ID', 'PRODUCTO', 'DESCRIPCIÓN', 'PRECIO', 'CATEGORIA', 'PROVEEDOR', ' ', '']} />
+                    <tbody className='table-responsive align-middle'>
+                        {
+                            productos.map(item => (
+                                <tr key={item.id}>
+                                    <td>
+                                        {item.id}
+                                    </td>
+                                    <td>
+                                        {item.nombre}
+                                    </td>
+                                    <td>
+                                        {item.descripcion}
+                                    </td>
+                                    <td>
+                                        {item.precio}
+                                    </td>
+                                    <td>
+                                        {item.categoriaId}
+                                    </td>
+                                    <td>
+                                        {item.proveedorId}
+                                    </td>
+                                    <td>
+                                        <button
+                                            className='btn btn-success btn-sm'
+                                            data-bs-toggle="modal"
+                                            data-bs-target='#modalUpdate'
+                                            onClick={() => setSelectedItem(item)}
+                                        >
+                                            <img src={editImage} alt="actualizar" width="24" height="24" style={{ filter: 'invert(100%)' }} />
+                                        </button>
+                                    </td>
+                                    <td>
+
+                                        <button
+                                            className='btn btn-danger btn-sm'
+                                            type="button"
+                                            onClick={(event) => handleEliminarProducto(event, item.id)}
+                                        >
+                                            <img src={deleteImage} alt="delete" width="24" height="24" style={{ filter: 'invert(100%)' }} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
+
+                <ModalActualizarProducto
                     mostrarAlerta={mostrarAlerta}
                     selectedItem={selectedItem}
-                    categorias={categorias}
-                    proveedores={proveedores}
                     updateProducto={updateProducto}
                 />
-            }
-            <AdministradorAlertas ref={administradorAlertasRef} />
 
-            {/* <Modal selectedItem={selectedItem} optionCategorias={optionCategorias} /> */}
+            </div>
+            <button className='btn btn-primary mt-2 ' data-bs-toggle="modal" data-bs-target='#modalCreate'>
+                {/* <div className='align-items-end text-center' style={{height: '30px'}}> */}
+
+                    <img src={newImage} alt="Nuevo-Producto" width="24" height="24" style={{ filter: 'invert(100%)' }} />
+                    <span className='align-middle p-1'>Nuevo Producto </span>
+                {/* </div> */}
+            </button>
+            <ModalCrearProducto
+                mostrarAlerta={mostrarAlerta}
+                createProducto={createProducto}
+            />
+
+            <AdministradorAlertas ref={administradorAlertasRef} />
         </>
     )
 }

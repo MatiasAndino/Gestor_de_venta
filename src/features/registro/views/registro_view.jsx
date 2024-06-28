@@ -7,7 +7,7 @@ const RegistroView = () => {
   return (
     <div className="d-flex vh-100 align-items-center">
       <div className="container border rounded col-auto p-5 bg-custom-opacity text-light min-width-25" >
-        <h2 className='text-center mb-5'>CREAR NUEVA CUENTA</h2>
+        <h2 className='text-center mb-5'><strong>CREAR NUEVA CUENTA</strong></h2>
         <RegistroForm />
         <p className='mt-4'>Ya tienes una cuenta? <a className="link-opacity-100 pointer" role="button" onClick={() => navigate('/')}>Logín</a></p>
       </div>
