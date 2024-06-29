@@ -1,24 +1,21 @@
 import React, { useRef, useState } from 'react'
-import { useProductos } from '../../hooks/useProductos';
-import ModalActualizarProducto from '../modal/modal_actualizar_producto';
-import TableHead from './table_head';
-import AdministradorAlertas from '../alerts/administrador_alertas';
-import ModalCrearProducto from '../modal/modal_crear_producto';
+import TableHead from '../table_head';
+import AdministradorAlertas from '../../alerts/administrador_alertas';
+import editImage from '../../../../assets/icons/pencil-square.svg'
+import deleteImage from '../../../../assets/icons/file-earmark-x.svg'
+import newImage from '../../../../assets/icons/file-earmark-plus.svg'
+import { useClientes } from '../../../hooks/useClientes';
+import ModalActualizarCliente from '../../modal/clientes/modal_actualizar_cliente';
+import ModalCrearCliente from '../../modal/clientes/modal_crear_cliente';
 
-import editImage from '../../../assets/icons/pencil-square.svg'
-import deleteImage from '../../../assets/icons/file-earmark-x.svg'
-import newImage from '../../../assets/icons/file-earmark-plus.svg'
-
-const TableData = () => {
-    const { productos, deleteProducto, updateProducto, createProducto } = useProductos();
+const TableDataClientes = () => {
+    const { clientes, deleteCliente, updateCliente, createCliente } = useClientes();
 
     const [selectedItem, setSelectedItem] = useState({
         id: 0,
         nombre: '',
-        descripcion: '',
-        precio: 0,
-        categoriaId: 1,
-        proveedorId: 1
+        apellido: '',
+        telefono: 0,
     });
 
     const administradorAlertasRef = useRef();
@@ -28,25 +25,25 @@ const TableData = () => {
     }
 
 
-    async function handleEliminarProducto(event, id) {
+    async function handleEliminarCliente(event, id) {
         event.preventDefault();
         try {
-            const { text, type } = await deleteProducto(id);
+            const { text, type } = await deleteCliente(id);
             mostrarAlerta(text, type);
         } catch (error) {
-            console.log('TableData-eliminarProducto', error)
+            console.log('TableDataClientes-eliminarCliente', error)
         }
     }
 
     return (
         <>
-            <div className="overflow-auto table-responsive h-table border border-secondary border-3 bg-dark">
+            <div className="overflow-auto table-responsive h-table border border-secondary border-3  bg-dark">
 
                 <table className="table table-striped table-dark">
-                    <TableHead datos={['ID', 'PRODUCTO', 'DESCRIPCIÓN', 'PRECIO', 'CATEGORIA', 'PROVEEDOR', '']} />
+                    <TableHead datos={['ID', 'NOMBRE', 'APELLIDO', 'TELEFONO', '']} />
                     <tbody className='table-responsive align-middle'>
                         {
-                            productos.map(item => (
+                            clientes.map(item => (
                                 <tr key={item.id}>
                                     <td>
                                         {item.id}
@@ -55,22 +52,16 @@ const TableData = () => {
                                         {item.nombre}
                                     </td>
                                     <td>
-                                        {item.descripcion}
+                                        {item.apellido}
                                     </td>
                                     <td>
-                                        {item.precio}
-                                    </td>
-                                    <td>
-                                        {item.categoriaId}
-                                    </td>
-                                    <td>
-                                        {item.proveedorId}
+                                        {item.telefono}
                                     </td>
                                     <td>
                                         <button
                                             className='btn btn-success btn-sm'
                                             data-bs-toggle="modal"
-                                            data-bs-target='#modalUpdate'
+                                            data-bs-target='#modalUpdateCliente'
                                             onClick={() => setSelectedItem(item)}
                                         >
                                             <img src={editImage} alt="actualizar" width="24" height="24" style={{ filter: 'invert(100%)' }} />
@@ -78,7 +69,7 @@ const TableData = () => {
                                         <button
                                             className='btn btn-danger btn-sm ms-2'
                                             type="button"
-                                            onClick={(event) => handleEliminarProducto(event, item.id)}
+                                            onClick={(event) => handleEliminarCliente(event, item.id)}
                                         >
                                             <img src={deleteImage} alt="delete" width="24" height="24" style={{ filter: 'invert(100%)' }} />
                                         </button>
@@ -89,28 +80,28 @@ const TableData = () => {
                     </tbody>
                 </table>
 
-                <ModalActualizarProducto
+                <ModalActualizarCliente
                     mostrarAlerta={mostrarAlerta}
                     selectedItem={selectedItem}
-                    updateProducto={updateProducto}
+                    updateCliente={updateCliente}
                 />
 
             </div>
-            <button className='btn btn-primary mt-2 ' data-bs-toggle="modal" data-bs-target='#modalCreate'>
+            <button className='btn btn-primary mt-2 ' data-bs-toggle="modal" data-bs-target='#modalCreateCliente'>
                 {/* <div className='align-items-end text-center' style={{height: '30px'}}> */}
 
-                    <img src={newImage} alt="Nuevo-Producto" width="24" height="24" style={{ filter: 'invert(100%)' }} />
-                    <span className='align-middle p-1'>Nuevo Producto </span>
+                <img src={newImage} alt="Nuevo-Cliente" width="24" height="24" style={{ filter: 'invert(100%)' }} />
+                <span className='align-middle p-1'>Nuevo Cliente </span>
                 {/* </div> */}
             </button>
-            <ModalCrearProducto
+            <ModalCrearCliente
                 mostrarAlerta={mostrarAlerta}
-                createProducto={createProducto}
+                createCliente={createCliente}
             />
 
             <AdministradorAlertas ref={administradorAlertasRef} />
         </>
     )
-}
+};
 
-export default TableData
+export default TableDataClientes;

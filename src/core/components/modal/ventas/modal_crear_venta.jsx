@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
-import useProveedores from "../../hooks/useProveedores";
-import useCategorias from "../../hooks/useCategorias";
+import { useState } from "react";
+import { useClientes } from "../../../hooks/useClientes";
+import { useProductos } from "../../../hooks/useProductos";
 
-const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
+const ModalCrearVenta = ({ mostrarAlerta, createVenta }) => {
 
     const initialValues = {
-        nombre: '',
-        descripcion: '',
-        precio: 0,
-        categoriaId: 1,
-        proveedorId: 1
+        fecha: '',
+        cantidad: '',
+        total: 0,
+        clientesId: 1,
+        productoId: 1
     }
 
-    const { categorias, isLoading: categoriasLoading } = useCategorias();
-    const { proveedores, isLoading: proveedoresLoading } = useProveedores();
+    const { clientes, isLoading: clientesLoading } = useClientes();
+    const { productos, isLoading: productosLoading } = useProductos();
 
     const [form, setForm] = useState(initialValues)
 
@@ -30,13 +30,14 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
         event.preventDefault();
 
         try {
-            const { text, type } = await createProducto(form);
+
+            const { text, type } = await createVenta(form);
 
             mostrarAlerta(text, type);
 
             defaultValues();
         } catch (error) {
-            console.log('ModalCrearProducto-handleForm', error);
+            console.log('ModalCrearVenta-handleForm', error);
         }
 
     }
@@ -48,72 +49,73 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
     return (
         <>
             {
-                !categoriasLoading && !proveedoresLoading &&
-                <div className="modal fade modal-lg" id="modalCreate" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                !clientesLoading && !productosLoading &&
+                <div className="modal fade modal-lg" id="modalCreateVenta" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
                     <div className="modal-dialog rounded sombra">
 
                         <div className="modal-content bg-dark shadow-lg ">
                             <div className="modal-header">
-                                <h1 className="modal-title fs-5 m-t" id="modalLabel"><strong>NUEVO PRODUCTO</strong></h1>
+                                <h1 className="modal-title fs-5 m-t" id="modalLabel"><strong>NUEVA VENTA</strong></h1>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={defaultValues} aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
                                 <form onSubmit={handleForm}>
 
                                     <div className="mb-3">
-                                        <label htmlFor="Nombre" className="form-label">Nombre</label>
+                                        <label htmlFor="fecha" className="form-label">Fecha</label>
                                         <input
-                                            name="nombre"
-                                            type="text"
+                                            name="fecha"
+                                            type="date"
                                             className="form-control p-2"
-                                            id="Nombre"
-                                            placeholder='Ingrese el nombre'
+                                            id="fecha"
+                                            placeholder='Ingrese la fecha'
                                             onChange={handleInputChange}
-                                            value={form.nombre}
+                                            value={form.fecha}
                                             required
                                         />
                                     </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor="descripcion" className="form-label">Descripción</label>
+                                        <label htmlFor="cantidad" className="form-label">Cantidad</label>
                                         <input
-                                            name="descripcion"
+                                            name="cantidad"
                                             type="text"
                                             className="form-control p-2"
-                                            id="descripcion"
-                                            placeholder='Ingrese la descripción'
+                                            id="cantidad"
+                                            placeholder='Ingrese la cantidad'
                                             onChange={handleInputChange}
-                                            value={form.descripcion}
+                                            value={form.cantidad}
                                             required
                                         />
                                     </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor='precio' className="form-label">Precio</label>
+                                        <label htmlFor='total' className="form-label">Total</label>
                                         <input
-                                            name='precio'
+                                            name='total'
                                             type='number'
                                             className="form-control p-2"
-                                            id="precio"
-                                            placeholder='Ingrese el precio'
+                                            id="total"
+                                            placeholder='Ingrese el total'
                                             onChange={handleInputChange}
-                                            value={form.precio}
+                                            value={form.total}
                                             required
                                         />
                                     </div>
                                     <div className="mb-3">
-                                        <label htmlFor='categoriaId' className="form-label">Categoría</label>
+                                        <label htmlFor='clientesId' className="form-label">Cliente</label>
 
                                         <select
-                                            name='categoriaId'
+                                            name='clientesId'
                                             className="form-select"
-                                            id="categoriaId"
+                                            id="clientesId"
                                             onChange={handleInputChange}
-                                            value={form.categoriaId}
+                                            value={form.clientesId}
                                         >
+
                                             {
-                                                categorias.map(cat => (
-                                                    <option value={cat.nombre} key={cat.id}>{cat.nombre}</option>)
+                                                clientes.map(cliente => (
+                                                    <option value={`${cliente.nombre} ${cliente.apellido}`} key={cliente.id}>{`${cliente.nombre} ${cliente.apellido}`}</option>)
                                                 )
                                             }
 
@@ -121,19 +123,18 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
                                     </div>
 
                                     <div className="mb-3">
-                                        <label htmlFor='proveedorId' className="form-label">Proveedor</label>
+                                        <label htmlFor='productoId' className="form-label">Producto</label>
 
                                         <select
-                                            name='proveedorId'
+                                            name='productoId'
                                             className="form-select"
-                                            id="proveedorId"
+                                            id="productoId"
                                             onChange={handleInputChange}
-                                            value={form.proveedorId}
+                                            value={form.productoId}
                                         >
-
                                             {
-                                                proveedores.map(prov => (
-                                                    <option value={prov.nombre} key={prov.id}>{prov.nombre}</option>)
+                                                productos.map(producto => (
+                                                    <option value={producto.nombre} key={producto.id}>{producto.nombre}</option>)
                                                 )
                                             }
 
@@ -155,4 +156,4 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
     )
 }
 
-export default ModalCrearProducto;
+export default ModalCrearVenta;

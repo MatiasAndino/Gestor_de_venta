@@ -1,9 +1,7 @@
 import useControl from "./useControl";
-import useCategorias from "./useCategorias";
-import useProveedores from "./useProveedores";
 import { useEffect, useState } from "react";
 
-export const useProductos = () => {
+export const useClientes = () => {
 
     const typeMessage = {
         error: 'error',
@@ -11,30 +9,27 @@ export const useProductos = () => {
     }
 
     const { controlToken } = useControl();
-    const { categorias, isLoading: categoriaLoading } = useCategorias();
-    const { proveedores, isLoading: proveedorLoading } = useProveedores();
 
-    const [productos, setProductos] = useState([]);
+    const [clientes, setClientes] = useState([]);
     const [update, setUpdate] = useState([]);
-
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const extraerProductos = async () => {
+        const extraerClientes = async () => {
             try {
-                const datos = await getProductos();
-                setProductos(() => [...datos]);
+                const datos = await getClientes();
+                setClientes(() => [...datos]);
             } catch (error) {
-                console.log('useProductos - useEffect', error);
+                console.log('useClientes - useEffect', error);
             } finally {
                 setIsLoading(false);
             }
         }
 
-        extraerProductos();
-    }, [categoriaLoading, proveedorLoading, update])
+        extraerClientes();
+    }, [update])
 
-    const getProductos = async () => {
+    const getClientes = async () => {
 
         try {
 
@@ -48,30 +43,21 @@ export const useProductos = () => {
                     'Authorization': token
                 },
             }
-            let res = await fetch(`http://localhost:3000/api/productos`, config);
+            let res = await fetch(`http://localhost:3000/api/clientes`, config);
 
             controlToken(res.status);
 
             let json = await res.json();
 
-            const datos = json.map(item => {
-                const categoriaId = categorias?.find(categoria => categoria.id === item.categoriaId).nombre || item.categoriaId;
-                const proveedorId = proveedores?.find(proveedor => proveedor.id === item.proveedorId).nombre || item.proveedorId;
 
-                return {
-                    ...item,
-                    categoriaId,
-                    proveedorId
-                }
-            });
-
-            return datos;
+            return json;
+            // setClientes([...json])
         } catch (error) {
-            console.log('useProductos-getProductos', error);
+            console.log('useClientes-getClientes', error);
         }
     }
 
-    const deleteProducto = async (id) => {
+    const deleteCliente = async (id) => {
         try {
             const token = localStorage.getItem('Authorization');
 
@@ -83,11 +69,10 @@ export const useProductos = () => {
                     'Authorization': token
                 },
             }
-            let res = await fetch(`http://localhost:3000/api/productos/${id}`, config);
+            let res = await fetch(`http://localhost:3000/api/clientes/${id}`, config);
             controlToken(res.status);
 
             let json = await res.json();
-
 
             if (res.status === 200) {
                 setUpdate((prev) => !prev);
@@ -95,21 +80,12 @@ export const useProductos = () => {
             }
             return { text: json.error, type: typeMessage.error };
         } catch (error) {
-            console.log('useProductos-deleteProducto', error)
+            console.log('useClientes-deleteCliente', error)
         }
     }
 
-    const updateProducto = async (form) => {
+    const updateCliente = async (form) => {
         const token = localStorage.getItem('Authorization');
-
-        const proveedorId = proveedores.find(proveedor => proveedor.nombre === form.proveedorId).id;
-        const categoriaId = categorias.find(categoria => categoria.nombre === form.categoriaId).id;
-
-        const realForm = {
-            ...form,
-            proveedorId,
-            categoriaId,
-        }
 
         try {
             let config = {
@@ -119,10 +95,10 @@ export const useProductos = () => {
                     'Content-Type': 'application/json',
                     'Authorization': token
                 },
-                body: JSON.stringify(realForm)
+                body: JSON.stringify(form)
             }
 
-            let res = await fetch(`http://localhost:3000/api/productos/${realForm.id}`, config);
+            let res = await fetch(`http://localhost:3000/api/clientes/${form.id}`, config);
             controlToken(res.status);
             let json = await res.json();
 
@@ -134,21 +110,12 @@ export const useProductos = () => {
 
 
         } catch (error) {
-            console.log('useProducto-updateProducto', error);
+            console.log('useCliente-updateCliente', error);
         }
     }
 
-    const createProducto = async (form) => {
+    const createCliente = async (form) => {
         const token = localStorage.getItem('Authorization');
-
-        const categoriaId = form.categoriaId !== 1 ? categorias.find(categoria => categoria.nombre === form.categoriaId).id : 1;
-        const proveedorId = form.proveedorId !== 1 ? proveedores.find(proveedor => proveedor.nombre === form.proveedorId).id : 1;
-
-        const realForm = {
-            ...form,
-            proveedorId,
-            categoriaId,
-        }
 
         try {
             let config = {
@@ -158,24 +125,25 @@ export const useProductos = () => {
                     'Content-Type': 'application/json',
                     'Authorization': token
                 },
-                body: JSON.stringify(realForm)
+                body: JSON.stringify(form)
             }
 
-            let res = await fetch(`http://localhost:3000/api/productos`, config);
+            let res = await fetch(`http://localhost:3000/api/clientes`, config);
             controlToken(res.status);
             let json = await res.json();
 
+
             if (res.status === 201) {
                 setUpdate((prev) => !prev);
-                return { text: 'Producto creado correctamente.', type: typeMessage.successful };
+                return { text: 'Cliente creado correctamente.', type: typeMessage.successful };
             }
             return { text: json.error, type: typeMessage.error };
 
 
         } catch (error) {
-            console.log('useProducto-createProducto', error);
+            console.log('useCliente-createCliente', error);
         }
     }
 
-    return { productos, isLoading, deleteProducto, updateProducto, createProducto }
+    return { clientes, isLoading, deleteCliente, updateCliente, createCliente }
 };

@@ -32,6 +32,7 @@ export const appRouter = createBrowserRouter([
         path: '/clientes',
         element: (
             <PrivateRoute>
+                <Navbar />
                 <ClientesView />
             </PrivateRoute>
         )

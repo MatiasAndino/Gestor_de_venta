@@ -6,7 +6,6 @@ const TableForm = () => {
 
     return (
         <>
-
             <TableData />
         </>
     )
