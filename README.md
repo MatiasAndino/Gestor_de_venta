@@ -1,6 +1,6 @@
 <h1 align="center"><em> Gestión de Ventas </em></h1>
 <h2>Descripción</h2>
-Este proyecto es un sistema de gestión de ventas que incluye funcionalidades para la gestión de productos, clientes y ventas, a través de una API proporcionada por el sitio ###. También se realizó un deploy en Vercel con la siguiente URL: https://gestor-de-venta.vercel.app/.
+Este proyecto fue creado para la plataforma de aprendizaje codo a codo. Se trata de un sistema de gestión de ventas que incluye funcionalidades para la gestión de productos, clientes y ventas, a través de una API proporcionada por el sitio ###. También se realizó un deploy en Vercel con la siguiente URL: https://gestor-de-venta.vercel.app/.
 
 <h2>Funcionalidades</h2>
 
