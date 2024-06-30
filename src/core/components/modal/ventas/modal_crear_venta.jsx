@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useClientes } from "../../../hooks/useClientes";
 import { useProductos } from "../../../hooks/useProductos";
 
@@ -19,40 +19,57 @@ const ModalCrearVenta = ({ mostrarAlerta, createVenta }) => {
 
     const handleInputChange = event => {
         event.preventDefault();
+
         const { name, value } = event.target;
         setForm({
             ...form,
             [name]: value
         })
     }
-
+    
     const handleForm = async event => {
         event.preventDefault();
-
+        
         try {
-
+            
             const { text, type } = await createVenta(form);
-
+            
             mostrarAlerta(text, type);
-
+            
             defaultValues();
         } catch (error) {
             console.log('ModalCrearVenta-handleForm', error);
         }
-
+        
     }
+    
+    useEffect(() => {
+        calcularTotal();
+    }, [form.cantidad,form.productoId])
 
     const defaultValues = () => {
         setForm(initialValues);
     }
 
     const controlCampos = () => {
-        const { fecha, cantidad, total, clienteId, productoId } = form;
+        const { fecha, cantidad, clientesId, productoId } = form;
 
         return fecha === '' || cantidad === '' ||
-            total === '' || clienteId === '' || productoId === '';
+            productoId === '' || clientesId === '';
     }
 
+    const calcularTotal = () => {
+        if (form.cantidad === '' || form.productoId === '') return;
+
+        const producto = productos.find(prod => prod.id === Number(form.productoId));
+
+        const total = form.cantidad * producto.precio;
+
+        setForm({
+            ...form,
+            total
+        })
+    }
 
     return (
         <>
@@ -97,7 +114,7 @@ const ModalCrearVenta = ({ mostrarAlerta, createVenta }) => {
                                         />
                                     </div>
 
-                                    <div className="mb-3">
+                                    {/* <div className="mb-3">
                                         <label htmlFor='total' className="form-label">Total</label>
                                         <input
                                             name='total'
@@ -107,8 +124,29 @@ const ModalCrearVenta = ({ mostrarAlerta, createVenta }) => {
                                             placeholder='Ingrese el total'
                                             onChange={handleInputChange}
                                             value={form.total}
-                                            required
+                                            disabled
                                         />
+                                    </div> */}
+
+                                    <div className="mb-3">
+                                        <label htmlFor='productoId' className="form-label">Producto</label>
+
+                                        <select
+                                            name='productoId'
+                                            className="form-select"
+                                            id="productoId"
+                                            onChange={handleInputChange}
+                                            value={form.productoId}
+                                            required
+                                        >
+                                            <option value=''>Seleccione un producto</option>
+                                            {
+                                                productos.map(producto => (
+                                                    <option value={producto.id} key={producto.id}>{producto.nombre}</option>)
+                                                )
+                                            }
+
+                                        </select>
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor='clientesId' className="form-label">Cliente</label>
@@ -125,27 +163,6 @@ const ModalCrearVenta = ({ mostrarAlerta, createVenta }) => {
                                             {
                                                 clientes.map(cliente => (
                                                     <option value={`${cliente.nombre} ${cliente.apellido}`} key={cliente.id}>{`${cliente.nombre} ${cliente.apellido}`}</option>)
-                                                )
-                                            }
-
-                                        </select>
-                                    </div>
-
-                                    <div className="mb-3">
-                                        <label htmlFor='productoId' className="form-label">Producto</label>
-
-                                        <select
-                                            name='productoId'
-                                            className="form-select"
-                                            id="productoId"
-                                            onChange={handleInputChange}
-                                            value={form.productoId}
-                                            required
-                                        >
-                                            <option value=''>Seleccione un producto</option>
-                                            {
-                                                productos.map(producto => (
-                                                    <option value={producto.nombre} key={producto.id}>{producto.nombre}</option>)
                                                 )
                                             }
 
