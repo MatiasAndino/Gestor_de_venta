@@ -1,5 +1,5 @@
 import React from 'react'
-import TableData from './table_data';
+import TableData from './table_data_productos';
 
 
 const ProductosForm = () => {

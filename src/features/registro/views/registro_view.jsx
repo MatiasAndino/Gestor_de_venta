@@ -1,6 +1,6 @@
 import React from 'react';
-import RegistroForm from '../../../core/components/form/registro_form';
 import { useNavigate } from 'react-router-dom';
+import RegistroForm from '../../../core/components/form/registro/registro_form';
 
 const RegistroView = () => {
   const navigate = useNavigate();

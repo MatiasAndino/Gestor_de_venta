@@ -1,21 +1,13 @@
 import { useEffect, useState } from "react";
-import useProveedores from "../../hooks/useProveedores";
-import useCategorias from "../../hooks/useCategorias";
+import useProveedores from "../../../hooks/useProveedores";
+import useCategorias from "../../../hooks/useCategorias";
 
-const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
-
-    const initialValues = {
-        nombre: '',
-        descripcion: '',
-        precio: '',
-        categoriaId: '',
-        proveedorId: ''
-    }
+const ModalActualizarProducto = ({ mostrarAlerta, selectedItem, updateProducto }) => {
 
     const { categorias, isLoading: categoriasLoading } = useCategorias();
     const { proveedores, isLoading: proveedoresLoading } = useProveedores();
 
-    const [form, setForm] = useState(initialValues)
+    const [form, setForm] = useState(selectedItem)
 
     const handleInputChange = event => {
         event.preventDefault();
@@ -26,46 +18,63 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
         })
     }
 
-    const controlCampos = () => {
-        const { nombre, descripcion, precio, categoriaId, proveedorId } = form;
-
-        return nombre === '' || descripcion === '' || precio === ''
-            || categoriaId === '' || proveedorId === '';
-    }
-
     const handleForm = async event => {
         event.preventDefault();
 
         try {
-            const { text, type } = await createProducto(form);
+            const { text, type } = await updateProducto(form);
 
             mostrarAlerta(text, type);
-
-            defaultValues();
         } catch (error) {
-            console.log('ModalCrearProducto-handleForm', error);
+            console.log('ModalActualizarProducto-handleForm', error);
         }
 
     }
 
     const defaultValues = () => {
-        setForm(initialValues);
+        setForm(selectedItem);
     }
+
+    const controlCampos = () => {
+        const { nombre, descripcion, precio } = form;
+
+        return nombre === '' || descripcion === '' || precio === '';
+    }
+
+    useEffect(() => {
+        if (selectedItem.id === form.id) return;
+
+        setForm(selectedItem);
+
+    }, [selectedItem]);
 
     return (
         <>
             {
                 !categoriasLoading && !proveedoresLoading &&
-                <div className="modal fade modal-lg" id="modalCreate" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                <div className="modal fade modal-lg" id="modalUpdate" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
                     <div className="modal-dialog rounded sombra">
 
                         <div className="modal-content bg-dark shadow-lg ">
                             <div className="modal-header">
-                                <h1 className="modal-title fs-5 m-t" id="modalLabel"><strong>NUEVO PRODUCTO</strong></h1>
+                                <h1 className="modal-title fs-5 m-t" id="modalLabel"><strong>ACTUALIZAR PRODUCTO</strong></h1>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" onClick={defaultValues} aria-label="Close"></button>
                             </div>
                             <div className="modal-body">
                                 <form onSubmit={handleForm}>
+
+                                    <div className="mb-3">
+                                        <label htmlFor="id" className="form-label">Id</label>
+                                        <input
+                                            name="id"
+                                            type="text"
+                                            className="form-control p-2"
+                                            id="id"
+                                            onChange={handleInputChange}
+                                            value={form.id}
+                                            disabled
+                                        />
+                                    </div>
 
                                     <div className="mb-3">
                                         <label htmlFor="Nombre" className="form-label">Nombre</label>
@@ -117,11 +126,11 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
                                             id="categoriaId"
                                             onChange={handleInputChange}
                                             value={form.categoriaId}
-                                            required
                                         >
-                                            <option value=''>Seleccione una categoría</option>
+                                            <option value={form.categoriaId}>{form.categoriaId}</option>
+
                                             {
-                                                categorias.map(cat => (
+                                                categorias.filter(cat => cat.nombre !== form.categoriaId).map(cat => (
                                                     <option value={cat.nombre} key={cat.id}>{cat.nombre}</option>)
                                                 )
                                             }
@@ -138,13 +147,11 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
                                             id="proveedorId"
                                             onChange={handleInputChange}
                                             value={form.proveedorId}
-                                            required
                                         >
-                                            <option value=''>Seleccione un proveedor</option>
-
+                                            <option value={form.proveedorId}>{form.proveedorId}</option>
 
                                             {
-                                                proveedores.map(prov => (
+                                                proveedores.filter(prov => prov.nombre !== form.proveedorId).map(prov => (
                                                     <option value={prov.nombre} key={prov.id}>{prov.nombre}</option>)
                                                 )
                                             }
@@ -154,6 +161,7 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
                                     <div className="modal-footer">
                                         <button type="submit" className="btn btn-primary mt-4" data-bs-dismiss={`${controlCampos() ? '' : 'modal'}`} >Guardar Cambios</button>
                                         <button type="button" className="btn btn-secondary mt-4" data-bs-dismiss="modal" onClick={defaultValues} >Close</button>
+
                                     </div>
                                 </form>
                             </div>
@@ -166,4 +174,4 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
     )
 }
 
-export default ModalCrearProducto;
+export default ModalActualizarProducto

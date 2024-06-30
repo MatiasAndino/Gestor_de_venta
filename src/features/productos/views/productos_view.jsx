@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductosForm from '../../../core/components/form/productos_form';
+import ProductosForm from '../../../core/components/form/productos/productos_form';
 
 const ProductosView = () => {
   return (

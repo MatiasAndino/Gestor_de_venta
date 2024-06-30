@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginForm from '../../../core/components/form/login_form';
+import LoginForm from '../../../core/components/form/login/login_form';
 import { useNavigate } from 'react-router-dom';
 
 const LoginView = () => {

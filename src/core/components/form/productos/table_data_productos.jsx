@@ -1,15 +1,14 @@
 import React, { useRef, useState } from 'react'
-import { useProductos } from '../../hooks/useProductos';
-import ModalActualizarProducto from '../modal/modal_actualizar_producto';
-import TableHead from './table_head';
-import AdministradorAlertas from '../alerts/administrador_alertas';
-import ModalCrearProducto from '../modal/modal_crear_producto';
+import ModalActualizarProducto from '../../modal/productos/modal_actualizar_producto';
+import TableHead from '../table_head';
+import AdministradorAlertas from '../../alerts/administrador_alertas';
+import ModalCrearProducto from '../../modal/productos/modal_crear_producto';
+import editImage from '../../../../assets/icons/pencil-square.svg';
+import deleteImage from '../../../../assets/icons/file-earmark-x.svg';
+import newImage from '../../../../assets/icons/file-earmark-plus.svg';
+import { useProductos } from '../../../hooks/useProductos';
 
-import editImage from '../../../assets/icons/pencil-square.svg'
-import deleteImage from '../../../assets/icons/file-earmark-x.svg'
-import newImage from '../../../assets/icons/file-earmark-plus.svg'
-
-const TableData = () => {
+const TableDataProductos = () => {
     const { productos, deleteProducto, updateProducto, createProducto } = useProductos();
 
     const [selectedItem, setSelectedItem] = useState({
@@ -34,7 +33,7 @@ const TableData = () => {
             const { text, type } = await deleteProducto(id);
             mostrarAlerta(text, type);
         } catch (error) {
-            console.log('TableData-eliminarProducto', error)
+            console.log('TableDataProductos-eliminarProducto', error)
         }
     }
 
@@ -111,6 +110,6 @@ const TableData = () => {
             <AdministradorAlertas ref={administradorAlertasRef} />
         </>
     )
-}
+};
 
-export default TableData
+export default TableDataProductos;

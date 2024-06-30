@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
-import { useRegister } from '../../hooks/useRegister';
+import { useRegister } from '../../../hooks/useRegister';
 import { useNavigate } from 'react-router-dom';
-import AdministradorAlertas from '../alerts/administrador_alertas';
+import AdministradorAlertas from '../../alerts/administrador_alertas';
 
 const RegistroForm = () => {
     const navigate = useNavigate();
