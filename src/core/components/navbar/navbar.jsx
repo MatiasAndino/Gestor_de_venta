@@ -12,7 +12,7 @@ const Navbar = () => {
 
     return (
 
-        <nav className="navbar navbar-expand-sm navbar-dark shadow-5-strong text-dark bg-dark bg-opacity-50" >
+        <nav className="navbar navbar-expand-sm navbar-dark shadow-5-strong text-dark bg-dark bg-opacity-75" >
             <div className='container-fluid d-flex'>
                 <div className="d-flex" style={{ marginLeft: '40px', height: '4vh' }}>
                     <a className="navbar-brand"><img src={logoImage} alt='logo' style={{ marginTop: '-10px', maxWidth:'5vh' }} /></a>

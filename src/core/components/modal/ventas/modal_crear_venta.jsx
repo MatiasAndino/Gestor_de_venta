@@ -7,9 +7,9 @@ const ModalCrearVenta = ({ mostrarAlerta, createVenta }) => {
     const initialValues = {
         fecha: '',
         cantidad: '',
-        total: 0,
-        clientesId: 1,
-        productoId: 1
+        total: '',
+        clientesId: '',
+        productoId: ''
     }
 
     const { clientes, isLoading: clientesLoading } = useClientes();
@@ -45,6 +45,14 @@ const ModalCrearVenta = ({ mostrarAlerta, createVenta }) => {
     const defaultValues = () => {
         setForm(initialValues);
     }
+
+    const controlCampos = () => {
+        const { fecha, cantidad, total, clienteId, productoId } = form;
+
+        return fecha === '' || cantidad === '' ||
+            total === '' || clienteId === '' || productoId === '';
+    }
+
 
     return (
         <>
@@ -111,8 +119,9 @@ const ModalCrearVenta = ({ mostrarAlerta, createVenta }) => {
                                             id="clientesId"
                                             onChange={handleInputChange}
                                             value={form.clientesId}
+                                            required
                                         >
-
+                                            <option value=''>Seleccione un cliente</option>)
                                             {
                                                 clientes.map(cliente => (
                                                     <option value={`${cliente.nombre} ${cliente.apellido}`} key={cliente.id}>{`${cliente.nombre} ${cliente.apellido}`}</option>)
@@ -131,7 +140,9 @@ const ModalCrearVenta = ({ mostrarAlerta, createVenta }) => {
                                             id="productoId"
                                             onChange={handleInputChange}
                                             value={form.productoId}
+                                            required
                                         >
+                                            <option value=''>Seleccione un producto</option>
                                             {
                                                 productos.map(producto => (
                                                     <option value={producto.nombre} key={producto.id}>{producto.nombre}</option>)
@@ -141,7 +152,7 @@ const ModalCrearVenta = ({ mostrarAlerta, createVenta }) => {
                                         </select>
                                     </div>
                                     <div className="modal-footer">
-                                        <button type="submit" className="btn btn-primary mt-4" data-bs-dismiss="modal" >Guardar Cambios</button>
+                                        <button type="submit" className="btn btn-primary mt-4" data-bs-dismiss={`${controlCampos() ? '' : 'modal'}`} >Guardar Cambios</button>
                                         <button type="button" className="btn btn-secondary mt-4" data-bs-dismiss="modal" onClick={defaultValues} >Close</button>
 
                                     </div>

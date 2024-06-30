@@ -7,9 +7,9 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
     const initialValues = {
         nombre: '',
         descripcion: '',
-        precio: 0,
-        categoriaId: 1,
-        proveedorId: 1
+        precio: '',
+        categoriaId: '',
+        proveedorId: ''
     }
 
     const { categorias, isLoading: categoriasLoading } = useCategorias();
@@ -24,6 +24,13 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
             ...form,
             [name]: value
         })
+    }
+
+    const controlCampos = () => {
+        const { nombre, descripcion, precio, categoriaId, proveedorId } = form;
+
+        return nombre === '' || descripcion === '' || precio === ''
+            || categoriaId === '' || proveedorId === '';
     }
 
     const handleForm = async event => {
@@ -110,7 +117,9 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
                                             id="categoriaId"
                                             onChange={handleInputChange}
                                             value={form.categoriaId}
+                                            required
                                         >
+                                            <option value=''>Seleccione una categoría</option>
                                             {
                                                 categorias.map(cat => (
                                                     <option value={cat.nombre} key={cat.id}>{cat.nombre}</option>)
@@ -129,7 +138,10 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
                                             id="proveedorId"
                                             onChange={handleInputChange}
                                             value={form.proveedorId}
+                                            required
                                         >
+                                            <option value=''>Seleccione un proveedor</option>
+
 
                                             {
                                                 proveedores.map(prov => (
@@ -140,9 +152,8 @@ const ModalCrearProducto = ({ mostrarAlerta, createProducto }) => {
                                         </select>
                                     </div>
                                     <div className="modal-footer">
-                                        <button type="submit" className="btn btn-primary mt-4" data-bs-dismiss="modal" >Guardar Cambios</button>
+                                        <button type="submit" className="btn btn-primary mt-4" data-bs-dismiss={`${controlCampos() ? '' : 'modal'}`} >Guardar Cambios</button>
                                         <button type="button" className="btn btn-secondary mt-4" data-bs-dismiss="modal" onClick={defaultValues} >Close</button>
-
                                     </div>
                                 </form>
                             </div>

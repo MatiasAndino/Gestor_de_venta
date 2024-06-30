@@ -25,3 +25,5 @@ dist-ssr
 
 
 .cambios.txt
+.vercel
+.env

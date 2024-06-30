@@ -68,7 +68,7 @@ const TableData = () => {
                                     </td>
                                     <td>
                                         <button
-                                            className='btn btn-success btn-sm'
+                                            className='btn btn-success btn-sm mx-1'
                                             data-bs-toggle="modal"
                                             data-bs-target='#modalUpdate'
                                             onClick={() => setSelectedItem(item)}
@@ -76,7 +76,7 @@ const TableData = () => {
                                             <img src={editImage} alt="actualizar" width="24" height="24" style={{ filter: 'invert(100%)' }} />
                                         </button>
                                         <button
-                                            className='btn btn-danger btn-sm ms-2'
+                                            className='btn btn-danger btn-sm mx-1'
                                             type="button"
                                             onClick={(event) => handleEliminarProducto(event, item.id)}
                                         >

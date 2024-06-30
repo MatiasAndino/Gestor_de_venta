@@ -2,9 +2,10 @@ body {
   background-color: rgb(24, 50, 89);
   /* background-color: rgb(48, 50, 53); */
   overflow-y: hidden;
+  background-image: url('https://cdn.pixabay.com/photo/2022/02/25/09/32/internet-doodles-7033818_1280.jpg');
 }
 
-.min-width-25{
+.min-width-25 {
   min-width: 25vw;
 }
 
@@ -12,16 +13,43 @@ body {
   animation: horizontal-shaking ease 4s infinite;
 }
 
-@keyframes horizontal-shaking{
-  0% { transform:translate(0,0) }
-  2% { transform:translate(5px,0) }
-  4% { transform:translate(0,0) }
-  6% { transform:translate(5px,0) }
-  8% { transform:translate(0,0) }
-  10% { transform:translate(5px,0) }
-  12% { transform:translate(0,0) }
-  100% { transform:translate(0,0) }
- }
+@keyframes horizontal-shaking {
+  0% {
+    transform: translate(0, 0)
+  }
+
+  2% {
+    transform: translate(15px, 0)
+  }
+
+  4% {
+    transform: translate(-15px, 0)
+  }
+
+  6% {
+    transform: translate(15px, 0)
+  }
+
+  8% {
+    transform: translate(-15px, 0)
+  }
+
+  10% {
+    transform: translate(15px, 0)
+  }
+
+  12% {
+    transform: translate(-15px, 0)
+  }
+
+  14% {
+    transform: translate(0, 0)
+  }
+
+  100% {
+    transform: translate(0, 0)
+  }
+}
 
 .table-responsive thead th {
   position: sticky;
@@ -35,4 +63,9 @@ body {
 
 .h-table {
   max-height: 60vh;
+}
+
+.bg-custom-opacity {
+  background-color: rgba(0, 0, 0, .8);
+  /* Cambia esto al color y opacidad que desees */
 }

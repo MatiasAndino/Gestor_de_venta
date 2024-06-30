@@ -141,8 +141,8 @@ export const useProductos = () => {
     const createProducto = async (form) => {
         const token = localStorage.getItem('Authorization');
 
-        const categoriaId = form.categoriaId !== 1 ? categorias.find(categoria => categoria.nombre === form.categoriaId).id : 1;
-        const proveedorId = form.proveedorId !== 1 ? proveedores.find(proveedor => proveedor.nombre === form.proveedorId).id : 1;
+        const categoriaId = categorias.find(categoria => categoria.nombre === form.categoriaId).id;
+        const proveedorId = proveedores.find(proveedor => proveedor.nombre === form.proveedorId).id;
 
         const realForm = {
             ...form,

@@ -144,8 +144,8 @@ export const useVentas = () => {
     const createVenta = async (form) => {
         const token = localStorage.getItem('Authorization');
 
-        const clientesId = form.clientesId !== 1 ? clientes.find(cliente => `${cliente.nombre} ${cliente.apellido}` === form.clientesId).id : 1;
-        const productoId = form.productoId !== 1 ? productos.find(producto => producto.nombre === form.productoId).id : 1;
+        const clientesId = clientes.find(cliente => `${cliente.nombre} ${cliente.apellido}` === form.clientesId).id;
+        const productoId = productos.find(producto => producto.nombre === form.productoId).id;
 
         const realForm = {
             ...form,

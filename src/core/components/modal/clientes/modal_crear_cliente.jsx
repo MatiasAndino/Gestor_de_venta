@@ -38,6 +38,12 @@ const ModalCrearCliente = ({ mostrarAlerta, createCliente }) => {
         setForm(initialValues);
     }
 
+    const controlCampos = () => {
+        const { nombre, apellido, telefono } = form;
+
+        return nombre === '' || apellido === '' || telefono === '';
+    }
+
     return (
         <>
             <div className="modal fade modal-lg" id="modalCreateCliente" tabIndex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -93,7 +99,8 @@ const ModalCrearCliente = ({ mostrarAlerta, createCliente }) => {
                                     />
                                 </div>
                                 <div className="modal-footer">
-                                    <button type="submit" className="btn btn-primary mt-4" data-bs-dismiss="modal" >Guardar Cambios</button>
+                                <button type="submit" className="btn btn-primary mt-4" data-bs-dismiss={`${controlCampos() ? '' : 'modal'}`} >Guardar Cambios</button>
+
                                     <button type="button" className="btn btn-secondary mt-4" data-bs-dismiss="modal" onClick={defaultValues} >Close</button>
 
                                 </div>

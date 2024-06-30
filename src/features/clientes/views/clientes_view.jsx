@@ -4,9 +4,9 @@ import TableDataClientes from '../../../core/components/form/clientes/table_data
 const ClientesView = () => {
   return (
     <div className="d-flex vh-100">
-      <div className="container bg-custom-opacity text-light" >
-        <h2 className='text-center p-3'><strong>CLIENTES</strong></h2>
-          <TableDataClientes />
+      <div className="container text-light" >
+        <h2 className='text-center bg-dark p-3'><strong>CLIENTES</strong></h2>
+        <TableDataClientes />
       </div>
     </div>
   )

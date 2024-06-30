@@ -30,6 +30,12 @@ const ModalActualizarCliente = ({ mostrarAlerta, selectedItem, updateCliente }) 
     const defaultValues = () => {
         setForm(selectedItem);
     }
+    
+    const controlCampos = () => {
+        const { nombre, apellido, telefono } = form;
+
+        return nombre === '' || apellido === '' || telefono === '';
+    }
 
     useEffect(() => {
         if (selectedItem.id === form.id) return;
@@ -107,7 +113,7 @@ const ModalActualizarCliente = ({ mostrarAlerta, selectedItem, updateCliente }) 
                                 </div>
 
                                 <div className="modal-footer">
-                                    <button type="submit" className="btn btn-primary mt-4" data-bs-dismiss="modal" >Guardar Cambios</button>
+                                    <button type="submit" className="btn btn-primary mt-4" data-bs-dismiss={`${controlCampos() ? '' : 'modal'}`} >Guardar Cambios</button>
                                     <button type="button" className="btn btn-secondary mt-4" data-bs-dismiss="modal" onClick={defaultValues} >Close</button>
 
                                 </div>
