@@ -145,12 +145,10 @@ export const useVentas = () => {
         const token = localStorage.getItem('Authorization');
 
         const clientesId = clientes.find(cliente => `${cliente.nombre} ${cliente.apellido}` === form.clientesId).id;
-        // const productoId = productos.find(producto => producto.nombre === form.productoId).id;
 
         const realForm = {
             ...form,
             clientesId,
-            // productoId,
         }
 
         try {
