@@ -1,7 +1,11 @@
+import { API_URL } from "../constants/constants";
 import useControl from "./useControl";
 import { useEffect, useState } from "react";
 
 export const useClientes = () => {
+
+
+    
 
     const typeMessage = {
         error: 'error',
@@ -43,7 +47,7 @@ export const useClientes = () => {
                     'Authorization': token
                 },
             }
-            let res = await fetch(`http://localhost:3000/api/clientes`, config);
+            let res = await fetch(`${API_URL}/api/clientes`, config);
 
             controlToken(res.status);
 
@@ -69,7 +73,7 @@ export const useClientes = () => {
                     'Authorization': token
                 },
             }
-            let res = await fetch(`http://localhost:3000/api/clientes/${id}`, config);
+            let res = await fetch(`${API_URL}/api/clientes/${id}`, config);
             controlToken(res.status);
 
             let json = await res.json();
@@ -98,7 +102,7 @@ export const useClientes = () => {
                 body: JSON.stringify(form)
             }
 
-            let res = await fetch(`http://localhost:3000/api/clientes/${form.id}`, config);
+            let res = await fetch(`${API_URL}api/clientes/${form.id}`, config);
             controlToken(res.status);
             let json = await res.json();
 
@@ -128,7 +132,7 @@ export const useClientes = () => {
                 body: JSON.stringify(form)
             }
 
-            let res = await fetch(`http://localhost:3000/api/clientes`, config);
+            let res = await fetch(`${API_URL}/api/clientes`, config);
             controlToken(res.status);
             let json = await res.json();
 

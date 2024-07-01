@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { API_URL } from "../constants/constants";
 
 const useProveedores = () => {
     
@@ -30,7 +31,7 @@ const useProveedores = () => {
                     'Content-Type': 'application/json'
                 },
             }
-            let res = await fetch(`http://localhost:3000/api/proveedores/${id}`, config);
+            let res = await fetch(`${API_URL}/api/proveedores/${id}`, config);
             let json = await res.json();
 
             return json;
@@ -48,7 +49,7 @@ const useProveedores = () => {
                     'Content-Type': 'application/json'
                 },
             }
-            let res = await fetch(`http://localhost:3000/api/proveedores`, config);
+            let res = await fetch(`${API_URL}/api/proveedores`, config);
             let json = await res.json();
 
             return json;

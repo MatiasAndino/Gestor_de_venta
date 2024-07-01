@@ -16,7 +16,7 @@ export const useRegister = () => {
             }
 
             if (form.password === form.confirmar_password) {
-                let res = await fetch('http://localhost:3000/api/usuarios/Register', config);
+                let res = await fetch('https://proyecto-backend-gestion-de-venta.onrender.com/api/usuarios/Register', config);
                 let json = await res.json();
 
                 if (json.usuario) {

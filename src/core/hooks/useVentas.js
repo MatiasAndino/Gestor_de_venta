@@ -2,6 +2,7 @@ import { useClientes } from "./useClientes";
 import useControl from "./useControl";
 import { useEffect, useState } from "react";
 import { useProductos } from "./useProductos";
+import { API_URL } from "../constants/constants";
 
 export const useVentas = () => {
 
@@ -48,7 +49,7 @@ export const useVentas = () => {
                     'Authorization': token
                 },
             }
-            let res = await fetch(`http://localhost:3000/api/ventas`, config);
+            let res = await fetch(`${API_URL}/api/ventas`, config);
 
             controlToken(res.status);
 
@@ -162,7 +163,7 @@ export const useVentas = () => {
                 body: JSON.stringify(realForm)
             }
 
-            let res = await fetch(`http://localhost:3000/api/ventas`, config);
+            let res = await fetch(`${API_URL}/api/ventas`, config);
             controlToken(res.status);
             let json = await res.json();
 

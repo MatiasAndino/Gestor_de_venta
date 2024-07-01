@@ -2,6 +2,7 @@ import useControl from "./useControl";
 import useCategorias from "./useCategorias";
 import useProveedores from "./useProveedores";
 import { useEffect, useState } from "react";
+import { API_URL } from "../constants/constants";
 
 export const useProductos = () => {
 
@@ -48,7 +49,7 @@ export const useProductos = () => {
                     'Authorization': token
                 },
             }
-            let res = await fetch(`http://localhost:3000/api/productos`, config);
+            let res = await fetch(`${API_URL}/api/productos`, config);
 
             controlToken(res.status);
 
@@ -83,7 +84,7 @@ export const useProductos = () => {
                     'Authorization': token
                 },
             }
-            let res = await fetch(`http://localhost:3000/api/productos/${id}`, config);
+            let res = await fetch(`${API_URL}/api/productos/${id}`, config);
             controlToken(res.status);
 
             let json = await res.json();
@@ -122,7 +123,7 @@ export const useProductos = () => {
                 body: JSON.stringify(realForm)
             }
 
-            let res = await fetch(`http://localhost:3000/api/productos/${realForm.id}`, config);
+            let res = await fetch(`${API_URL}/api/productos/${realForm.id}`, config);
             controlToken(res.status);
             let json = await res.json();
 
@@ -161,7 +162,7 @@ export const useProductos = () => {
                 body: JSON.stringify(realForm)
             }
 
-            let res = await fetch(`http://localhost:3000/api/productos`, config);
+            let res = await fetch(`${API_URL}/api/productos`, config);
             controlToken(res.status);
             let json = await res.json();
 

@@ -1,19 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/auth_context";
 import { jwtDecode } from "jwt-decode";
-import AlertaError from "../../components/alerts/alerta_error";
+import { API_URL } from "../../constants/constants";
+import AdministradorAlertas from "../../components/alerts/administrador_alertas";
 
 export const AuthProvider = ({ children }) => {
 
     const TOKEN_KEY = "Authorization";
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isNull, setIsNull] = useState(false);
     const [tokenData, setTokenData] = useState({
         'Authorization': '',
         nombre: '',
         rol: ''
     });
+
+    const typeMessage = {
+        error: 'error',
+        successful: 'successful'
+    }
+
+    const administradorAlertasRef = useRef();
+
+    function mostrarAlerta(text, type) {
+        administradorAlertasRef.current.showMessage(text, type);
+    }
 
     const jwTokenDecode = (token) => {
         const { nombre, rol } = jwtDecode(token);
@@ -50,11 +61,12 @@ export const AuthProvider = ({ children }) => {
                 body: JSON.stringify(form)
             }
 
-            let res = await fetch('http://localhost:3000/api/usuarios/login', config);
-            let { token } = await res.json();
+            let res = await fetch(`${API_URL}/api/usuarios/login`, config);
+            let json = await res.json();
 
-            if (token) {
-                const datos = jwTokenDecode(token);
+
+            if (json.token) {
+                const datos = jwTokenDecode(json.token);
 
                 Object.keys(datos).forEach(key => {
                     localStorage.setItem(key, datos[key])
@@ -62,11 +74,9 @@ export const AuthProvider = ({ children }) => {
 
                 setIsLoggedIn(true);
                 setTokenData(datos);
+                mostrarAlerta(json.message, typeMessage.successful);
             } else {
-                setIsNull(true)
-                setTimeout(() => {
-                    setIsNull(false)
-                }, 1500);
+                mostrarAlerta(json.message, typeMessage.error);
             }
         } catch (error) {
             console.log('AuthProvider-login', error);
@@ -91,7 +101,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
-            {isNull && <AlertaError mensaje="Email o password incorrectos." />}
+            <AdministradorAlertas ref={administradorAlertasRef} />
             {children}
         </AuthContext.Provider>
     )

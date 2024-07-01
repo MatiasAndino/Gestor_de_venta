@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react"
+import { API_URL } from "../constants/constants";
 
 const useCategorias = () => {
     
+
+
     const [categorias, setCategorias] = useState();
     const [isLoading, setIsLoading] = useState(true);
     
@@ -29,7 +32,7 @@ const useCategorias = () => {
                     'Content-Type': 'application/json'
                 },
             }
-            let res = await fetch(`http://localhost:3000/api/categorias/${id}`, config);
+            let res = await fetch(`${API_URL}/api/categorias/${id}`, config);
             let json = await res.json();
 
 
@@ -49,7 +52,7 @@ const useCategorias = () => {
                     'Content-Type': 'application/json'
                 },
             }
-            let res = await fetch(`http://localhost:3000/api/categorias`, config);
+            let res = await fetch(`${API_URL}/api/categorias`, config);
             let json = await res.json();
 
             return json;
