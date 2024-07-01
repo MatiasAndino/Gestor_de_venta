@@ -102,7 +102,7 @@ export const useClientes = () => {
                 body: JSON.stringify(form)
             }
 
-            let res = await fetch(`${API_URL}api/clientes/${form.id}`, config);
+            let res = await fetch(`${API_URL}/api/clientes/${form.id}`, config);
             controlToken(res.status);
             let json = await res.json();
 
